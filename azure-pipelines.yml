@@ -3,6 +3,7 @@ trigger:
 
 variables:
   azureSubscription: 'AzureSubscription'  # Azure DevOps のサービスコネクション名
+  dockerRegistryServiceConnection: 'AcrConnection' # Docker 用（dockerregistry）
   acrName: 'acr-sidecar'                           # ACR の名前（ログインサーバーは myacrname.azurecr.io）
   acrLoginServer: 'acr-sidecar.azurecr.io'
   imageTag: '$(Build.BuildId)'
@@ -22,7 +23,7 @@ stages:
       displayName: 'Login to ACR'
       inputs:
         command: login
-        containerRegistry: $(azureSubscription)
+        containerRegistry: $(dockerRegistryServiceConnection)
 
     - task: Docker@2
       displayName: 'Build and Push Web App Image'
