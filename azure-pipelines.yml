@@ -3,49 +3,15 @@ trigger:
 
 variables:
   azureSubscription: 'AzureSubscription'  # Azure DevOps のサービスコネクション名
-  dockerRegistryServiceConnection: 'AcrConnection' # Docker 用（dockerregistry）
-  acrName: 'acr-sidecar'                           # ACR の名前（ログインサーバーは myacrname.azurecr.io）
-  acrLoginServer: 'acr-sidecar.azurecr.io'
-  imageTag: '$(Build.BuildId)'
-  appName: 'webapp-sidecar'
-  resourceGroup: 'sidecar'
+  appName: 'sample-sidecar'
+  resourceGroup: 'yuka_rg_0636'
 
 pool:
   name: 'Default'
 
 stages:
-- stage: BuildAndPush
-  displayName: 'Build and Push Docker Images'
-  jobs:
-  - job: Build
-    steps:
-    - task: Docker@2
-      displayName: 'Login to ACR'
-      inputs:
-        command: login
-        containerRegistry: $(dockerRegistryServiceConnection)
-
-    - task: Docker@2
-      displayName: 'Build and Push Web App Image'
-      inputs:
-        command: buildAndPush
-        repository: $(acrLoginServer)/my-web-app
-        dockerfile: webapp/Dockerfile
-        tags: |
-          $(imageTag)
-
-    - task: Docker@2
-      displayName: 'Build and Push Sidecar Image'
-      inputs:
-        command: buildAndPush
-        repository: $(acrLoginServer)/my-sidecar
-        dockerfile: sidecar/Dockerfile
-        tags: |
-          $(imageTag)
-
 - stage: Deploy
   displayName: 'Deploy to Azure Web App'
-  dependsOn: BuildAndPush
   jobs:
   - job: Deploy
     steps:
