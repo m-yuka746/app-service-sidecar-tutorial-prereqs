@@ -22,5 +22,5 @@ stages:
         azureSubscription: $(azureSubscription)
         appName: $(appName)
         resourceGroupName: $(resourceGroup)
-        multicontainerConfigFile: docker-compose.yml
+        multicontainerConfigFile: docker-compose.yaml
         multicontainerConfigType: 'compose'
